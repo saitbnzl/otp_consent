@@ -36,6 +36,8 @@ class SMSBroadcastReceiver : BroadcastReceiver() {
                     try {
                         // Start activity to show consent dialog to user, activity must be started in
                         // 5 minutes, otherwise you'll receive another TIMEOUT intent
+                        consentIntent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        consentIntent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                         activity?.startActivityForResult(consentIntent, SMS_CONSENT_REQUEST)
                         listener?.onShowPermissionDialog()
                     } catch (e: ActivityNotFoundException) {
