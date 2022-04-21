@@ -1,11 +1,14 @@
 package com.huynn109.otp_consent
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.provider.Telephony
 import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.app.ShareCompat.getCallingActivity
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
@@ -24,6 +27,7 @@ class SMSBroadcastReceiver : BroadcastReceiver() {
         this.activity = activity
     }
 
+    @SuppressLint("NewApi")
     override fun onReceive(context: Context, intent: Intent) {
         if (SmsRetriever.SMS_RETRIEVED_ACTION == intent.action) {
             val extras = intent.extras
@@ -38,8 +42,8 @@ class SMSBroadcastReceiver : BroadcastReceiver() {
                         // 5 minutes, otherwise you'll receive another TIMEOUT intent
                         consentIntent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         consentIntent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                        val defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(getApplicationContext());
-                        if(getCallingActivity().getPackageName().equals(defaultSmsPackageName)){
+                        val defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(context);
+                        if(getCallingActivity(activity).getPackageName().equals(defaultSmsPackageName)){
                             activity?.startActivityForResult(consentIntent, SMS_CONSENT_REQUEST)
                             listener?.onShowPermissionDialog()
                         }
