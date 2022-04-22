@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.provider.Telephony
+import android.provider.Telephony.Sms
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.app.ShareCompat.getCallingActivity
 import com.google.android.gms.auth.api.phone.SmsRetriever
@@ -42,8 +43,8 @@ class SMSBroadcastReceiver : BroadcastReceiver() {
                         // 5 minutes, otherwise you'll receive another TIMEOUT intent
                         consentIntent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         consentIntent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                        val defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(context);
-                        if(getCallingActivity(activity).getPackageName().equals(defaultSmsPackageName)){
+                        val defaultSmsPackageName = Sms.getDefaultSmsPackage(context);
+                        if(getCallingActivity(activity).packageName.equals(defaultSmsPackageName)){
                             activity?.startActivityForResult(consentIntent, SMS_CONSENT_REQUEST)
                             listener?.onShowPermissionDialog()
                         }
