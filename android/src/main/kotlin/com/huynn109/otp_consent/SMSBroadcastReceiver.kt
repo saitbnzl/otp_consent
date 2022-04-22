@@ -44,6 +44,7 @@ class SMSBroadcastReceiver : BroadcastReceiver() {
                         consentIntent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         consentIntent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                         val defaultSmsPackageName = Sms.getDefaultSmsPackage(context);
+
                         if(getCallingActivity(activity).packageName.equals(defaultSmsPackageName)){
                             activity?.startActivityForResult(consentIntent, SMS_CONSENT_REQUEST)
                             listener?.onShowPermissionDialog()
